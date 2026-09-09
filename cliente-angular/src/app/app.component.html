@@ -1,0 +1,92 @@
+<header class="encabezado">
+  <div class="contenedor">
+    <span class="insignia">NEO4J + SPRING</span>
+    <h1>Biblioteca</h1>
+    <p>Administra el catálogo almacenado como nodos en Neo4j.</p>
+  </div>
+</header>
+
+<main class="contenedor cuadricula">
+  <section class="tarjeta formulario-tarjeta">
+    <div class="titulo-seccion">
+      <div>
+        <small>{{ idEditando === null ? 'NUEVO REGISTRO' : 'EDITANDO ID ' + idEditando }}</small>
+        <h2>{{ idEditando === null ? 'Agregar libro' : 'Actualizar libro' }}</h2>
+      </div>
+      <button *ngIf="idEditando !== null" class="boton texto" type="button" (click)="cancelarEdicion()">Cancelar</button>
+    </div>
+
+    <form #libroForm="ngForm" (ngSubmit)="guardar(libroForm)" novalidate>
+      <label>Título <span>*</span></label>
+      <input name="titulo" [(ngModel)]="formulario.titulo" required maxlength="200" #titulo="ngModel" placeholder="Ej. Clean Code">
+      <p class="error-campo" *ngIf="titulo.invalid && titulo.touched">El título es obligatorio.</p>
+
+      <label>Autor <span>*</span></label>
+      <input name="autor" [(ngModel)]="formulario.autor" required maxlength="150" #autor="ngModel" placeholder="Ej. Robert C. Martin">
+      <p class="error-campo" *ngIf="autor.invalid && autor.touched">El autor es obligatorio.</p>
+
+      <div class="dos-columnas">
+        <div>
+          <label>Año</label>
+          <input name="anio" [(ngModel)]="formulario.anio" type="number" min="0" max="3000" placeholder="2008">
+        </div>
+        <div>
+          <label>ISBN</label>
+          <input name="isbn" [(ngModel)]="formulario.isbn" maxlength="20" placeholder="9780132350884">
+        </div>
+      </div>
+
+      <button class="boton primario ancho" type="submit" [disabled]="guardando">
+        {{ guardando ? 'Guardando…' : (idEditando === null ? 'Crear libro' : 'Guardar cambios') }}
+      </button>
+    </form>
+  </section>
+
+  <section class="contenido">
+    <div class="tarjeta busqueda">
+      <div>
+        <label>Buscar por título</label>
+        <input [(ngModel)]="filtroTitulo" (keyup.enter)="buscar()" placeholder="Parte del título">
+      </div>
+      <div>
+        <label>Buscar por autor</label>
+        <input [(ngModel)]="filtroAutor" (keyup.enter)="buscar()" placeholder="Parte del autor">
+      </div>
+      <button class="boton primario" (click)="buscar()">Buscar</button>
+      <button class="boton secundario" (click)="limpiarBusqueda()">Limpiar</button>
+    </div>
+
+    <div class="aviso exito" *ngIf="mensaje">{{ mensaje }}</div>
+    <div class="aviso fallo" *ngIf="error">{{ error }}</div>
+
+    <div class="cabecera-lista">
+      <div>
+        <small>CATÁLOGO</small>
+        <h2>Libros registrados</h2>
+      </div>
+      <span class="contador">{{ libros.length }} {{ libros.length === 1 ? 'libro' : 'libros' }}</span>
+    </div>
+
+    <div class="estado" *ngIf="cargando">Cargando libros…</div>
+    <div class="estado" *ngIf="!cargando && libros.length === 0">No hay libros que mostrar.</div>
+
+    <div class="lista" *ngIf="!cargando">
+      <article class="libro" *ngFor="let libro of libros; trackBy: trackById">
+        <div class="icono">{{ libro.titulo.charAt(0).toUpperCase() }}</div>
+        <div class="datos">
+          <h3>{{ libro.titulo }}</h3>
+          <p>{{ libro.autor }}</p>
+          <div class="metadatos">
+            <span>ID {{ libro.id }}</span>
+            <span *ngIf="libro.anio">{{ libro.anio }}</span>
+            <span *ngIf="libro.isbn">ISBN {{ libro.isbn }}</span>
+          </div>
+        </div>
+        <div class="acciones">
+          <button class="boton secundario" (click)="editar(libro)">Editar</button>
+          <button class="boton peligro" (click)="eliminar(libro)">Eliminar</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
