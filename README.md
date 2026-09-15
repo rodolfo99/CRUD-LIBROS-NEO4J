@@ -1,8 +1,25 @@
-# CRUD de Libros con Spring Boot, Neo4j y Angular
+# CRUD de Libros — Spring Boot + Neo4j + Angular
 
-Proyecto full stack de ejemplo para administrar un catálogo de libros usando **Spring Boot**, **Spring Data Neo4j**, **Neo4j Community** y un cliente web desarrollado con **Angular**.
+> Aplicación **full stack en Java** para administrar libros con **Spring Boot**, **Spring Data Neo4j**, **Neo4j**, **Angular** y **Docker Compose**.
 
-El backend expone una API REST para realizar operaciones CRUD sobre nodos de libros almacenados en Neo4j, mientras que el frontend Angular permite gestionar el catálogo desde el navegador.
+![Java](https://img.shields.io/badge/Java-21-informational)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3-informational)
+![Neo4j](https://img.shields.io/badge/Neo4j-5.26-informational)
+![Angular](https://img.shields.io/badge/Angular-20.3-informational)
+![Docker](https://img.shields.io/badge/Docker-Compose-informational)
+
+Este repositorio muestra una implementación clara de un **CRUD con Spring Boot y Neo4j**, acompañado de un cliente Angular. Es una base útil para aprender Spring Data Neo4j, bases de datos de grafos, APIs REST y desarrollo full stack con Java.
+
+## Lo más importante
+
+- Backend REST con Spring Boot y Java 21.
+- Persistencia con Spring Data Neo4j.
+- Neo4j Community como base de datos de grafos.
+- Cliente Angular separado del backend.
+- CRUD completo de libros.
+- Validación de datos.
+- Ejecución sencilla con Docker Compose.
+- Base preparada para evolucionar hacia relaciones entre autores, editoriales, categorías, préstamos o recomendaciones.
 
 ## Tecnologías
 
@@ -18,7 +35,19 @@ El backend expone una API REST para realizar operaciones CRUD sobre nodos de lib
 - TypeScript 5.9
 - RxJS
 
-## Estructura del repositorio
+## Arquitectura
+
+```text
+Angular
+   │ HTTP / REST
+   ▼
+Spring Boot
+   │ Spring Data Neo4j
+   ▼
+Neo4j Graph Database
+```
+
+## Estructura
 
 ```text
 .
@@ -26,46 +55,33 @@ El backend expone una API REST para realizar operaciones CRUD sobre nodos de lib
 └── cliente-angular/  # Frontend Angular
 ```
 
-## Backend
+## Inicio rápido
 
-El backend expone una API REST para crear, consultar, actualizar y eliminar libros almacenados en Neo4j.
-
-Ruta principal:
-
-```text
-http://localhost:8080/api/libros
-```
-
-Cada libro contiene campos como:
-
-```text
-id
-titulo
-autor
-anio
-```
-
-## Ejecutar Neo4j con Docker
+### 1. Neo4j
 
 ```bash
 cd crud
 docker compose up -d
 ```
 
-La configuración incluida utiliza:
+Servicios:
 
 - Neo4j Browser: `http://localhost:7474`
 - Bolt: `bolt://localhost:7687`
 - Usuario: `neo4j`
 - Contraseña por defecto: `password123`
 
-Los datos y logs se conservan mediante volúmenes Docker.
-
-## Ejecutar Spring Boot
+### 2. Backend Spring Boot
 
 ```bash
 cd crud
 mvn spring-boot:run
+```
+
+API principal:
+
+```text
+http://localhost:8080/api/libros
 ```
 
 También puedes generar el JAR:
@@ -75,7 +91,7 @@ mvn clean package
 java -jar target/crud-spring-neo4j-1.0.0.jar
 ```
 
-La aplicación puede configurarse mediante variables de entorno:
+Variables disponibles:
 
 ```text
 NEO4J_URI
@@ -84,7 +100,7 @@ NEO4J_PASSWORD
 SERVER_PORT
 ```
 
-## Cliente Angular
+### 3. Cliente Angular
 
 ```bash
 cd cliente-angular
@@ -92,7 +108,7 @@ npm install
 npm start
 ```
 
-Después abre:
+Abre:
 
 ```text
 http://localhost:4200
@@ -109,18 +125,35 @@ http://localhost:4200
 - API REST con Spring Boot
 - Cliente web Angular
 - Validación de datos
-- Ejecución local con Docker Compose
+- Docker Compose
 
-## ¿Por qué Neo4j?
+## Por qué Neo4j
 
-Neo4j es una base de datos orientada a grafos. Aunque este ejemplo utiliza un modelo sencillo de libros, la misma base puede extenderse para representar relaciones como autores, editoriales, categorías, préstamos o recomendaciones.
+Neo4j es una base de datos orientada a grafos. Aunque el ejemplo parte de libros, puede extenderse naturalmente a modelos como:
 
-Esto permite evolucionar el CRUD hacia casos de uso donde las relaciones entre entidades sean tan importantes como los propios datos.
+```text
+(Autor)-[:ESCRIBIO]->(Libro)
+(Libro)-[:PERTENECE_A]->(Categoria)
+(Usuario)-[:PRESTAMO]->(Libro)
+(Libro)-[:RELACIONADO_CON]->(Libro)
+```
 
-## Objetivo del proyecto
+Eso hace que el repositorio sea una buena introducción a **Spring Data Neo4j**, Cypher y aplicaciones donde las relaciones entre entidades son fundamentales.
 
-Mostrar una implementación clara de un **CRUD con Spring Boot, Spring Data Neo4j y Angular**, incluyendo persistencia en una base de datos de grafos, API REST, Docker y frontend separado.
+## Otros proyectos del mismo perfil
+
+- [CRUD PostgreSQL + Angular](https://github.com/rodolfo99/CRUD-PstgreSQL-Libros-con-cliente-angular)
+- [CRUD Apache Solr + Angular](https://github.com/rodolfo99/CRUD-Solr-con-cliente-angular)
+- [CRUD GraphQL + PostgreSQL + Angular](https://github.com/rodolfo99/crud-GraphQL-con-cliente-angular)
+- [Spring Data GraphDB](https://github.com/rodolfo99/Spring-Data-GraphDB)
+- [Marc2BF — MARC21 a BIBFRAME](https://github.com/rodolfo99/Marc2BF)
+
+## Autor
+
+**Rodolfo Valencia** — desarrollo de software, Java, Spring, Angular, bases de datos, tecnologías semánticas e inteligencia artificial.
+
+GitHub: [@rodolfo99](https://github.com/rodolfo99)
 
 ## Temas relacionados
 
-Spring Boot, Spring Data Neo4j, Neo4j, graph database, base de datos de grafos, Angular, Java, TypeScript, REST API, CRUD, Docker, Maven, desarrollo full stack.
+Spring Boot · Spring Data Neo4j · Neo4j · graph database · Cypher · Angular · Java · TypeScript · REST API · CRUD · Docker · Maven · full stack
